@@ -1,5 +1,6 @@
 {
   "slackWebhookUrl": "http://link-to-slack-webhook",
+  "hangOutWebhookUrl": "http://link-to-google-hangout-webhook",
   "upsourceUrl": "http://upsourceUrl",
   "upsourceUser": "upsource-user",
   "upsourcePass": "upsource-pass"

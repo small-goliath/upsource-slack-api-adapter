@@ -39,5 +39,38 @@ module.exports = {
 		.catch(function(err) {
 			console.log(`Adapter resolved with error: ${err}`);
 		})
-	}
+	},
+    talkToHangOut: function(review) {
+        const adapter = Adapters[review.dataType];
+
+        if (_.isUndefined(adapter)) {
+            console.log(`No adapter has been registered for the event ${review.dataType}`);
+            return;
+        }
+        var adapted = adapter(review);
+
+        Promise.resolve(adapted).then(function(value) {
+                let text;
+                const attachment = value.attachments[0];
+                const fields = attachment.fields || [];
+
+                const fieldTexts = fields.map(field => `${field.title}: ${field.value}`).join("\n");
+                if (fieldTexts) {
+                    text += `\n${fieldTexts}`;
+                }
+                const message = {
+                    text: text
+                };
+
+                request.post(config.hangOutWebhookUrl, {
+                    json: true,
+                    body: message
+                }, function(err, res, body) {
+                    console.log(body);
+                });
+            })
+            .catch(function(err) {
+                console.log(`Adapter resolved with error: ${err}`);
+            })
+    }
 };
