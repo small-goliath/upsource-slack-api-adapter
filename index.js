@@ -7,7 +7,15 @@ var app = require('./app');
 server.use(bodyParser.json());
 
 server.post('/', function (req, res) {
-  app.talkToSlack(req.body, req.query);
+  const destination = req.query.destination;
+
+  if (destination === "hangout") {
+    app.talkToHangOut(req.body);
+  } else if (destination === "slack") {
+    app.talkToSlack(req.body, req.query);
+  } else {
+    console.log(`No destination`);
+  }
   res.end();
 });
 
